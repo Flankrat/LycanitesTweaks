@@ -59,25 +59,27 @@ public class ClientEventListener {
                 }
             }
 
-            if(renderFullTooltip(!ForgeConfigHandler.clientFeaturesMixinConfig.shortenTooltips)) {
-                if(ForgeConfigHandler.integrationConfig.soulgazerBaubleBonusRecharge != 0) {
-                    addWordWrappedTooltip(event, "item.soulgazer.description.baublebonus", ItemBase.DESCRIPTION_WIDTH);
+            if(ModLoadedUtil.baubles.isLoaded()) {
+                if(renderFullTooltip(!ForgeConfigHandler.clientFeaturesMixinConfig.shortenTooltips)) {
+                    if(ForgeConfigHandler.integrationConfig.soulgazerBaubleBonusRecharge != 0) {
+                        addWordWrappedTooltip(event, "item.soulgazer.description.baublebonus", ItemBase.DESCRIPTION_WIDTH);
+                    }
                 }
-            }
 
-            if(ForgeConfigHandler.integrationConfig.soulgazerBauble && ModLoadedUtil.baubles.isLoaded()) {
-                ILycanitesTweaksPlayerCapability ltp = LycanitesTweaksPlayerCapability.getForPlayer(event.getEntityPlayer());
-                if(ltp != null) {
-                    int autoID = ltp.getSoulgazerAutoToggle();
-                    int manualID = ltp.getSoulgazerManualToggle() ? 1 : 2;
-                    event.getToolTip().add(
-                            I18n.format("item.soulgazer.description.keybind.auto." + autoID)
-                                    + I18n.format("item.lycanitestweaks.tooltip.keybind", KeyHandler.TOGGLE_SOULGAZER_AUTO.getDisplayName())
-                    );
-                    event.getToolTip().add(
-                            I18n.format("item.soulgazer.description.keybind.manual." + manualID)
-                                    + I18n.format("item.lycanitestweaks.tooltip.keybind", KeyHandler.TOGGLE_SOULGAZER_MANUAL.getDisplayName())
-                    );
+                if(ForgeConfigHandler.integrationConfig.soulgazerBauble) {
+                    ILycanitesTweaksPlayerCapability ltp = LycanitesTweaksPlayerCapability.getForPlayer(event.getEntityPlayer());
+                    if(ltp != null) {
+                        int autoID = ltp.getSoulgazerAutoToggle();
+                        int manualID = ltp.getSoulgazerManualToggle() ? 1 : 2;
+                        event.getToolTip().add(
+                                I18n.format("item.soulgazer.description.keybind.auto." + autoID)
+                                        + I18n.format("item.lycanitestweaks.tooltip.keybind", KeyHandler.TOGGLE_SOULGAZER_AUTO.getDisplayName())
+                        );
+                        event.getToolTip().add(
+                                I18n.format("item.soulgazer.description.keybind.manual." + manualID)
+                                        + I18n.format("item.lycanitestweaks.tooltip.keybind", KeyHandler.TOGGLE_SOULGAZER_MANUAL.getDisplayName())
+                        );
+                    }
                 }
             }
         }

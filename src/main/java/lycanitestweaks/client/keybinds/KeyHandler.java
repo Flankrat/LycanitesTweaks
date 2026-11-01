@@ -61,6 +61,7 @@ public class KeyHandler {
 	public static void init() {
 		ClientRegistry.registerKeyBinding(SPAWN_KEYBOUND_PET);
 		ClientRegistry.registerKeyBinding(TELEPORT_KEYBOUND_PET);
+
 		if(ForgeConfigHandler.integrationConfig.soulgazerBauble) {
 			ClientRegistry.registerKeyBinding(TOGGLE_SOULGAZER_AUTO);
 			ClientRegistry.registerKeyBinding(TOGGLE_SOULGAZER_MANUAL);
@@ -75,6 +76,7 @@ public class KeyHandler {
 	public static void onGameplayKeyPress(InputEvent.KeyInputEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		if(player == null) return;
+
         if (KeyHandler.SPAWN_KEYBOUND_PET.isPressed()) {
             ILycanitesTweaksPlayerCapability lpt = LycanitesTweaksPlayerCapability.getForPlayer(player);
             if (lpt != null) lpt.setKeyboundPetSpawning();
@@ -83,19 +85,25 @@ public class KeyHandler {
             ILycanitesTweaksPlayerCapability lpt = LycanitesTweaksPlayerCapability.getForPlayer(player);
             if(lpt != null) lpt.setKeyboundPetTeleport();
         }
-        if(KeyHandler.TOGGLE_SOULGAZER_AUTO.isPressed()) {
-            ILycanitesTweaksPlayerCapability ltp = LycanitesTweaksPlayerCapability.getForPlayer(player);
-            if (ltp != null) PacketHandler.instance.sendToServer(new PacketKeybindSoulgazerAutoNext());
-        }
-        if(KeyHandler.TOGGLE_SOULGAZER_MANUAL.isPressed()) {
-            ILycanitesTweaksPlayerCapability ltp = LycanitesTweaksPlayerCapability.getForPlayer(player);
-            if (ltp != null) PacketHandler.instance.sendToServer(new PacketKeybindSoulgazerManualNext());
-        }
-		BAUBLE_KEY_BINDINGS.forEach(baubleKeyBinding -> {
-			if(baubleKeyBinding.isPressed() && ModLoadedUtil.baubles.isLoaded()) {
-				PacketHandler.instance.sendToServer(new PacketToggleableBauble(baubleKeyBinding.slot));
+
+		if(ForgeConfigHandler.integrationConfig.soulgazerBauble) {
+			if(KeyHandler.TOGGLE_SOULGAZER_AUTO.isPressed()) {
+				ILycanitesTweaksPlayerCapability ltp = LycanitesTweaksPlayerCapability.getForPlayer(player);
+				if (ltp != null) PacketHandler.instance.sendToServer(new PacketKeybindSoulgazerAutoNext());
 			}
-		});
+			if(KeyHandler.TOGGLE_SOULGAZER_MANUAL.isPressed()) {
+				ILycanitesTweaksPlayerCapability ltp = LycanitesTweaksPlayerCapability.getForPlayer(player);
+				if (ltp != null) PacketHandler.instance.sendToServer(new PacketKeybindSoulgazerManualNext());
+			}
+		}
+
+		if(ModLoadedUtil.baubles.isLoaded()) {
+			BAUBLE_KEY_BINDINGS.forEach(baubleKeyBinding -> {
+				if(baubleKeyBinding.isPressed()) {
+					PacketHandler.instance.sendToServer(new PacketToggleableBauble(baubleKeyBinding.slot));
+				}
+			});
+		}
     }
 
 	private static BaubleKeyBinding createKeyBinding(String description, int keyCode, int slot) {
