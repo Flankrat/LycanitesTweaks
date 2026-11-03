@@ -44,6 +44,8 @@ import java.util.Set;
 
 public class EntityLivingHandler {
 
+    // TODO Separate patches from features
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onDummyTargeted(LivingSetAttackTargetEvent event) {
         if(!ForgeConfigHandler.server.fearAttackTargetEvent) return;
@@ -195,6 +197,13 @@ public class EntityLivingHandler {
         if(!(event.getEntityLiving() instanceof BaseCreatureEntity)) return;
         BaseCreatureEntity creature = (BaseCreatureEntity) event.getEntityLiving();
 
+        // Patches
+        boolean earlyFirstSpawn = creature.firstSpawn; // TODO update chaining, currently using this to check for json spawner pml init
+        if(creature.firstSpawn && ForgeConfigHandler.mixinPatchesConfig.fixLateOnSpawnStats) {
+            creature.onFirstSpawn();
+        }
+        // Features
+
         // Random SpawnedAsBoss
         if(event.getWorld().rand.nextFloat() < ForgeConfigHandler.majorFeaturesConfig.creatureStatsConfig.spawnedAsBossNaturalSpawnChance && event.getSpawner() == null) {
             byte minLight = ForgeConfigHandler.majorFeaturesConfig.creatureStatsConfig.spawnedAsBossNaturalMinimumLight;
@@ -225,14 +234,12 @@ public class EntityLivingHandler {
         else if(event.getSpawner() != null && PlayerMobLevelsConfig.getPmlBonusCategories().containsKey(PlayerMobLevelsConfig.BonusCategory.SpawnerTile)){
             category = PlayerMobLevelsConfig.BonusCategory.SpawnerTile;
         }
-        if(category == null) return;
 
         EntityPlayer player = event.getWorld().getClosestPlayerToEntity(event.getEntityLiving(), 128);
         IPlayerMobLevelCapability pml = PlayerMobLevelCapability.getForPlayer(player);
 
-        if(pml == null || !creature.firstSpawn) return;
+        if(pml == null || !earlyFirstSpawn) return;
         if(!PlayerMobLevelsConfig.getPmlBonusCategorySoulgazer().contains(category) || Helpers.hasSoulgazerEquiped(player)){
-            creature.onFirstSpawn();
             creature.addLevel(pml.getTotalLevelsForCategory(category, creature));
             if(ForgeConfigHandler.debug.debugLoggerTick) LycanitesTweaks.LOGGER.log(Level.DEBUG, "{} Spawning: {}", category.name(), creature);
         }

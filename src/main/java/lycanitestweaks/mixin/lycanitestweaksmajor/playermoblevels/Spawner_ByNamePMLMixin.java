@@ -24,6 +24,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Spawner.class)
 public abstract class Spawner_ByNamePMLMixin {
 
+    // TODO onFirstSpawn call here despite ForgeEvent usage, should run through ForgeEvent, IDEA replace spawner object with JSON spawner
+
     @Shadow(remap = false)
     public String name;
 

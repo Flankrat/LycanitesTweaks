@@ -42,6 +42,10 @@ public class PatchConfig {
     @MixinConfig.MixinToggle(defaultValue = true, lateMixin = "mixins.lycanitestweaks.patches.assetmanagerreload.json")
     public boolean fixAssetManagerReloading = true;
 
+    @Config.Comment("Fixes fake death behaviors and missed timing stat updates due to On Spawn Stats being generated 1 tick after spawn")
+    @Config.Name("Fix Applying On Spawn Stats Late")
+    public boolean fixLateOnSpawnStats = true;
+
     @Config.Comment({
             "Fixes Lycanites Entities sometimes receiving a minimum of 1.0 point of damage.",
             "Affects the following known cases:",
