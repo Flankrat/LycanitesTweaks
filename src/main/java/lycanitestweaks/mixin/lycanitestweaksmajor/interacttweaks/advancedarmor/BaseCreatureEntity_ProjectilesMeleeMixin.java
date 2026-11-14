@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// Based on EntityPlayer.attackTargetEntityWithCurrentItem
 @Mixin(BaseCreatureEntity.class)
 public abstract class BaseCreatureEntity_ProjectilesMeleeMixin extends EntityLiving {
 
@@ -24,7 +25,7 @@ public abstract class BaseCreatureEntity_ProjectilesMeleeMixin extends EntityLiv
 
     @ModifyVariable(
             method = "doRangedDamage",
-            at = @At(value = "INVOKE", target = "Lcom/lycanitesmobs/core/entity/CreatureStats;getPierce()D"),
+            at = @At(value = "STORE", ordinal = 0),
             name = "damage",
             remap = false
     )
@@ -32,6 +33,10 @@ public abstract class BaseCreatureEntity_ProjectilesMeleeMixin extends EntityLiv
         if(target instanceof EntityLivingBase) {
             damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((EntityLivingBase) target).getCreatureAttribute());
         }
+
+        int fireEnchantDuration = EnchantmentHelper.getFireAspectModifier(this);
+        if(fireEnchantDuration > 0)
+            target.setFire(fireEnchantDuration * 4);
         return damage;
     }
 
@@ -55,10 +60,10 @@ public abstract class BaseCreatureEntity_ProjectilesMeleeMixin extends EntityLiv
                 );
             }
         }
-        // Fire Enchanted Held Weapons:
+        this.applyEnchantments(this, target);
+
         int fireEnchantDuration = EnchantmentHelper.getFireAspectModifier(this);
         if(fireEnchantDuration > 0)
             target.setFire(fireEnchantDuration * 4);
-        this.applyEnchantments(this, target);
     }
 }

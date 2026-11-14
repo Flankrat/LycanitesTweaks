@@ -13,18 +13,26 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// Based on EntityPlayer.attackTargetEntityWithCurrentItem
 @Mixin(ProjectileBehaviourLaser.class)
 public abstract class ProjectileBehaviourLaser_ProjectilesMeleeEnchMixin {
 
     @ModifyVariable(
             method = "updateDamage",
-            at = @At(value = "CONSTANT", args = "doubleValue=1", ordinal = 2),
+            at = @At(value = "STORE", ordinal = 0),
             name = "damage",
             remap = false
     )
     private float lycanitesTweaks_lycanitesMobsBaseCreatureEntity_doRangedDamageCalcByCreature(float damage, @Local(argsOnly = true) BaseProjectileEntity projectile, @Local(argsOnly = true) Entity target){
-        if(projectile.getThrower() instanceof EntityLivingBase && target instanceof EntityLivingBase) {
-            damage += EnchantmentHelper.getModifierForCreature(projectile.getThrower().getHeldItemMainhand(), ((EntityLivingBase) target).getCreatureAttribute());
+        if(projectile.getThrower() != null) {
+            EntityLivingBase attacker = projectile.getThrower();
+            if(target instanceof EntityLivingBase) {
+                damage += EnchantmentHelper.getModifierForCreature(attacker.getHeldItemMainhand(), ((EntityLivingBase) target).getCreatureAttribute());
+            }
+
+            int fireEnchantDuration = EnchantmentHelper.getFireAspectModifier(attacker);
+            if(fireEnchantDuration > 0)
+                target.setFire(fireEnchantDuration * 4);
         }
         return damage;
     }
@@ -51,11 +59,11 @@ public abstract class ProjectileBehaviourLaser_ProjectilesMeleeEnchMixin {
                 );
             }
         }
-        // Fire Enchanted Held Weapons:
+        EnchantmentHelper.applyThornEnchantments(attacker, target);
+        EnchantmentHelper.applyArthropodEnchantments(attacker, target);
+
         int fireEnchantDuration = EnchantmentHelper.getFireAspectModifier(attacker);
         if(fireEnchantDuration > 0)
             target.setFire(fireEnchantDuration * 4);
-        EnchantmentHelper.applyThornEnchantments(attacker, target);
-        EnchantmentHelper.applyArthropodEnchantments(attacker, target);
     }
 }

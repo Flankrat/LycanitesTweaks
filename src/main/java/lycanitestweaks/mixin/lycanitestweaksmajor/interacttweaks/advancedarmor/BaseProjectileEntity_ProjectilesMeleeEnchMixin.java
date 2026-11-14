@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+// Based on EntityPlayer.attackTargetEntityWithCurrentItem
 @Mixin(BaseProjectileEntity.class)
 public abstract class BaseProjectileEntity_ProjectilesMeleeEnchMixin extends EntityThrowable {
 
@@ -22,12 +23,17 @@ public abstract class BaseProjectileEntity_ProjectilesMeleeEnchMixin extends Ent
 
     @ModifyVariable(
             method = "onImpact",
-            at = @At(value = "FIELD", target = "Lcom/lycanitesmobs/core/entity/BaseProjectileEntity;pierce:I", remap = false),
+            at = @At(value = "STORE", ordinal = 0),
             name = "damage"
     )
     private float lycanitesTweaks_lycanitesMobsBaseCreatureEntity_doRangedDamageCalcByCreature(float damage, @Local EntityLivingBase target){
-        if(this.getThrower() instanceof EntityLivingBase) {
-            damage += EnchantmentHelper.getModifierForCreature(this.getThrower().getHeldItemMainhand(), target.getCreatureAttribute());
+        if(this.getThrower() != null) {
+            EntityLivingBase attacker = this.getThrower();
+            damage += EnchantmentHelper.getModifierForCreature(attacker.getHeldItemMainhand(), target.getCreatureAttribute());
+
+            int fireEnchantDuration = EnchantmentHelper.getFireAspectModifier(attacker);
+            if(fireEnchantDuration > 0)
+                target.setFire(fireEnchantDuration * 4);
         }
         return damage;
     }
@@ -52,10 +58,10 @@ public abstract class BaseProjectileEntity_ProjectilesMeleeEnchMixin extends Ent
                     -MathHelper.cos(attacker.rotationYaw * (float) Math.PI / 180.F)
             );
         }
-        // Fire Enchanted Held Weapons:
+        this.applyEnchantments(attacker, target);
+
         int fireEnchantDuration = EnchantmentHelper.getFireAspectModifier(attacker);
         if(fireEnchantDuration > 0)
             target.setFire(fireEnchantDuration * 4);
-        this.applyEnchantments(attacker, target);
     }
 }

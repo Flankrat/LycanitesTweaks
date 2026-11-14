@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// Based on EntityPlayer.attackTargetEntityWithCurrentItem
 @Mixin(EntityProjectileLaser.class)
 public abstract class EntityProjectileLaser_ProjectilesMeleeEnchMixin extends BaseProjectileEntity {
 
@@ -23,13 +24,20 @@ public abstract class EntityProjectileLaser_ProjectilesMeleeEnchMixin extends Ba
 
     @ModifyVariable(
             method = "updateDamage",
-            at = @At(value = "CONSTANT", args = "doubleValue=1", ordinal = 2),
+            at = @At(value = "STORE", ordinal = 0),
             name = "damage",
             remap = false
     )
     private float lycanitesTweaks_lycanitesMobsBaseCreatureEntity_doRangedDamageCalcByCreature(float damage, @Local(argsOnly = true) Entity target){
-        if(this.getThrower() instanceof EntityLivingBase && target instanceof EntityLivingBase) {
-            damage += EnchantmentHelper.getModifierForCreature(this.getThrower().getHeldItemMainhand(), ((EntityLivingBase) target).getCreatureAttribute());
+        if(this.getThrower() != null) {
+            EntityLivingBase attacker = this.getThrower();
+            if(target instanceof EntityLivingBase) {
+                damage += EnchantmentHelper.getModifierForCreature(attacker.getHeldItemMainhand(), ((EntityLivingBase) target).getCreatureAttribute());
+            }
+
+            int fireEnchantDuration = EnchantmentHelper.getFireAspectModifier(attacker);
+            if(fireEnchantDuration > 0)
+                target.setFire(fireEnchantDuration * 4);
         }
         return damage;
     }
@@ -56,10 +64,10 @@ public abstract class EntityProjectileLaser_ProjectilesMeleeEnchMixin extends Ba
                 );
             }
         }
-        // Fire Enchanted Held Weapons:
+        this.applyEnchantments(attacker, target);
+
         int fireEnchantDuration = EnchantmentHelper.getFireAspectModifier(attacker);
         if(fireEnchantDuration > 0)
             target.setFire(fireEnchantDuration * 4);
-        this.applyEnchantments(attacker, target);
     }
 }
