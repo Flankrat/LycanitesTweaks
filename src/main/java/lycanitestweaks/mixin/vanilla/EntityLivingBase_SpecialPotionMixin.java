@@ -3,8 +3,7 @@ package lycanitestweaks.mixin.vanilla;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import lycanitestweaks.potion.SpecialPotionEffect;
+import lycanitestweaks.util.IPotionEffect_ExtraPropertiesMixin;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -28,48 +27,10 @@ public abstract class EntityLivingBase_SpecialPotionMixin {
             cancellable = true
     )
     private void lycanitesTweaks_vanillaEntityLivingBase_clearActivePotionsPurgeImmune(CallbackInfo ci, @Local PotionEffect effect){
-        if(effect instanceof SpecialPotionEffect) {
-            if(!((SpecialPotionEffect) effect).getPurgeable()) {
+        if(effect instanceof IPotionEffect_ExtraPropertiesMixin) {
+            if(!((IPotionEffect_ExtraPropertiesMixin) effect).lycanitesTweaks$getPurgeable()) {
                 ci.cancel();
             }
-        }
-    }
-
-    @WrapOperation(
-            method = "addPotionEffect",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/potion/PotionEffect;combine(Lnet/minecraft/potion/PotionEffect;)V")
-    )
-    private void lycanitesTweaks_vanillaEntityLivingBase_addPotionEffectCombineSpecial(PotionEffect current, PotionEffect other, Operation<Void> original, @Local(name = "potioneffect") LocalRef<PotionEffect> potionRef){
-        Boolean upgrade = null;
-        if(!(current instanceof SpecialPotionEffect) && other instanceof SpecialPotionEffect) {
-            upgrade = true;
-        }
-        else if(current instanceof SpecialPotionEffect && !(other instanceof SpecialPotionEffect)) {
-            upgrade = false;
-        }
-
-        boolean replace = false;
-
-        if(upgrade != null) {
-            if (other.getAmplifier() > current.getAmplifier()) {
-                replace = true;
-            }
-            else if (other.getAmplifier() == current.getAmplifier() && current.getDuration() < other.getDuration()) {
-                replace = true;
-            }
-        }
-
-        if(replace) {
-            PotionEffect replacement = upgrade
-                    ? new SpecialPotionEffect(current)
-                    : new PotionEffect(current);
-
-            original.call(replacement, other);
-            potionRef.set(replacement);
-            this.activePotionsMap.replace(current.getPotion(), replacement);
-        }
-        else {
-            original.call(current, other);
         }
     }
 
@@ -79,9 +40,8 @@ public abstract class EntityLivingBase_SpecialPotionMixin {
     )
     private PotionEffect lycanitesTweaks_vanillaEntityLivingBase_removePotionEffectCleanseImmune(EntityLivingBase instance, Potion potioneffectin, Operation<PotionEffect> original){
         PotionEffect potionEffect = instance.getActivePotionEffect(potioneffectin);
-        if(potionEffect instanceof SpecialPotionEffect) {
-            SpecialPotionEffect specialPotionEffect = (SpecialPotionEffect) potionEffect;
-            if(!specialPotionEffect.getCleansable()) {
+        if(potionEffect instanceof IPotionEffect_ExtraPropertiesMixin) {
+            if(!((IPotionEffect_ExtraPropertiesMixin) potionEffect).lycanitesTweaks$getCleansable()) {
                 return null;
             }
         }
@@ -94,8 +54,8 @@ public abstract class EntityLivingBase_SpecialPotionMixin {
             cancellable = true
     )
     private void lycanitesTweaks_vanillaEntityLivingBase_curePotionEffectsCleanseImmune(CallbackInfo ci, @Local PotionEffect effect){
-        if(effect instanceof SpecialPotionEffect) {
-            if(!((SpecialPotionEffect) effect).getCleansable()) {
+        if(effect instanceof IPotionEffect_ExtraPropertiesMixin) {
+            if(!((IPotionEffect_ExtraPropertiesMixin) effect).lycanitesTweaks$getCleansable()) {
                 ci.cancel();
             }
         }

@@ -3,6 +3,7 @@ package lycanitestweaks.handlers.features.effect;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import lycanitestweaks.potion.PotionCripplingBase;
 import lycanitestweaks.util.Helpers;
+import lycanitestweaks.util.IDamageSource_UnsetPropertiesMixin;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -60,17 +61,34 @@ public class CripplingEffectsHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void cripplingPiercingAttack(LivingAttackEvent event) {
-        if (event.getEntityLiving() == null || event.getEntityLiving().world.isRemote) return;
-        if (event.getSource().isDamageAbsolute() && event.getSource().isUnblockable()) return; //don't run endless loops
-        if (!entityHasCripplingPotion(event.getEntityLiving(), p ->
-                p.shouldPierceAll() || p.shouldPierceEnvironment() && event.getSource().getTrueSource() == null))
+        EntityLivingBase target = event.getEntityLiving();
+        if (target == null || target.world.isRemote) return;
+
+        DamageSource originalSource = event.getSource();
+        if (originalSource.isDamageAbsolute() && originalSource.isUnblockable()) return; //don't run endless loops
+        if (!entityHasCripplingPotion(target, p ->
+                p.shouldPierceAll() || p.shouldPierceEnvironment() && originalSource.getTrueSource() == null)) {
             return;
+        }
 
         event.setCanceled(true); //don't run the current attack
 
         //instead run a new attack
-        DamageSource newSource = copyDamageSource(event.getSource()).setDamageBypassesArmor().setDamageIsAbsolute();
-        event.getEntityLiving().attackEntityFrom(newSource, event.getAmount());
+        if(originalSource instanceof IDamageSource_UnsetPropertiesMixin) {
+            IDamageSource_UnsetPropertiesMixin settable = (IDamageSource_UnsetPropertiesMixin) originalSource;
+            boolean unsetAbsolute = !originalSource.isDamageAbsolute();
+            boolean unsetUnblockable = !originalSource.isUnblockable();
+
+            originalSource.setDamageBypassesArmor().setDamageIsAbsolute();
+            target.attackEntityFrom(originalSource, event.getAmount());
+
+            if(unsetAbsolute) settable.lycanitesTweaks$unsetDamageIsAbsolute();
+            if(unsetUnblockable) settable.lycanitesTweaks$unsetDamageBypassesArmor();
+        }
+        else {
+            DamageSource newSource = copyDamageSource(originalSource).setDamageBypassesArmor().setDamageIsAbsolute();
+            target.attackEntityFrom(newSource, event.getAmount());
+        }
     }
 
     // Copies most properties. Death message should remain the same and pass any damageType string matches

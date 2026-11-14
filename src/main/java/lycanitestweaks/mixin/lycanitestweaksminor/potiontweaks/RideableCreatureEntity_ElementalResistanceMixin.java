@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import lycanitestweaks.handlers.ForgeConfigHandler;
 import lycanitestweaks.handlers.ForgeConfigProvider;
-import lycanitestweaks.potion.SpecialPotionEffect;
+import lycanitestweaks.util.IPotionEffect_ExtraPropertiesMixin;
 import lycanitestweaks.util.LycanitesEntityUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
@@ -34,8 +34,8 @@ public abstract class RideableCreatureEntity_ElementalResistanceMixin extends Ta
             Potion iceResistance = ForgeConfigProvider.getPetIceResistance();
             if(iceResistance != null) {
                 PotionEffect potionEffect = new PotionEffect(iceResistance, (5 * 20) + 5, 1);
-                if(ForgeConfigHandler.integrationConfig.potionCoreAuraNoSickness) {
-                    potionEffect = new SpecialPotionEffect(potionEffect).setNeutral(true);
+                if(ForgeConfigHandler.integrationConfig.potionCoreAuraNoSickness && potionEffect instanceof IPotionEffect_ExtraPropertiesMixin) {
+                    ((IPotionEffect_ExtraPropertiesMixin) potionEffect).lycanitesTweaks$setNeutral(true);
                 }
                 rider.addPotionEffect(potionEffect);
             }
@@ -44,8 +44,8 @@ public abstract class RideableCreatureEntity_ElementalResistanceMixin extends Ta
             Potion lightningResistance = ForgeConfigProvider.getPetLightningResistance();
             if(lightningResistance != null) {
                 PotionEffect potionEffect = new PotionEffect(lightningResistance, (5 * 20) + 5, 1);
-                if(ForgeConfigHandler.integrationConfig.potionCoreAuraNoSickness) {
-                    potionEffect = new SpecialPotionEffect(potionEffect).setNeutral(true);
+                if(ForgeConfigHandler.integrationConfig.potionCoreAuraNoSickness && potionEffect instanceof IPotionEffect_ExtraPropertiesMixin) {
+                    ((IPotionEffect_ExtraPropertiesMixin) potionEffect).lycanitesTweaks$setNeutral(true);
                 }
                 rider.addPotionEffect(potionEffect);
             }

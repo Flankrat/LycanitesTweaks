@@ -2,7 +2,7 @@ package lycanitestweaks.mixin.lycanitestweaksminor.potiontweaks.aurapotionsickne
 
 import com.lycanitesmobs.core.entity.creature.EntityIoray;
 import com.lycanitesmobs.core.entity.creature.EntityRoa;
-import lycanitestweaks.potion.SpecialPotionEffect;
+import lycanitestweaks.util.IPotionEffect_ExtraPropertiesMixin;
 import net.minecraft.potion.PotionEffect;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,7 +19,10 @@ public abstract class RideableEntitySwimmers_SicknessMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;addPotionEffect(Lnet/minecraft/potion/PotionEffect;)V", ordinal = 0)
     )
     private PotionEffect lycanitesTweaks_lycanitesMobsRideableCreatureEntitys_riderEffectsNoPotionSickness(PotionEffect potioneffectIn){
-        return new SpecialPotionEffect(potioneffectIn).setNeutral(true);
+        if(potioneffectIn instanceof IPotionEffect_ExtraPropertiesMixin) {
+            ((IPotionEffect_ExtraPropertiesMixin) potioneffectIn).lycanitesTweaks$setNeutral(true);
+        }
+        return potioneffectIn;
     }
 
     @ModifyArg(
@@ -27,6 +30,9 @@ public abstract class RideableEntitySwimmers_SicknessMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;addPotionEffect(Lnet/minecraft/potion/PotionEffect;)V", ordinal = 0)
     )
     private PotionEffect lycanitesTweaks_lycanitesMobsRideableCreatureEntitys_onDismountedNoPotionSickness(PotionEffect potioneffectIn){
-        return new SpecialPotionEffect(potioneffectIn).setNeutral(true);
+        if(potioneffectIn instanceof IPotionEffect_ExtraPropertiesMixin) {
+            ((IPotionEffect_ExtraPropertiesMixin) potioneffectIn).lycanitesTweaks$setNeutral(true);
+        }
+        return potioneffectIn;
     }
 }

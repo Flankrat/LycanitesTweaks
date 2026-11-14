@@ -11,7 +11,7 @@
     "vanilla.EntityLiving_InvokerMixin",
     "vanilla.EntityLivingBase_InvokerMixin",
     "vanilla.EntityLivingBase_SpecialPotionMixin",
-    "vanilla.PotionEffect_SpecialInstanceMixin"
+    "vanilla.PotionEffect_ExtraPropertiesMixin"
   ],
   "injectors": {
     "maxShiftBy": 10

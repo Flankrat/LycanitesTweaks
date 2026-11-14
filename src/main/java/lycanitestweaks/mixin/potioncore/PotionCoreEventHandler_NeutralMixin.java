@@ -3,7 +3,7 @@ package lycanitestweaks.mixin.potioncore;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.tmtravlr.potioncore.PotionCoreEventHandler;
-import lycanitestweaks.potion.SpecialPotionEffect;
+import lycanitestweaks.util.IPotionEffect_ExtraPropertiesMixin;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,8 +18,8 @@ public abstract class PotionCoreEventHandler_NeutralMixin {
     )
     private static boolean lycanitesTweaks_potionCorePotionCoreEventHandler_onLivingUpdateNeutralNoSickness(boolean isBadEffect, LivingEvent.LivingUpdateEvent event, @Local PotionEffect potionEffect){
         boolean isNeutral = false;
-        if(potionEffect instanceof SpecialPotionEffect) {
-            isNeutral = ((SpecialPotionEffect) potionEffect).getNeutral();
+        if(potionEffect instanceof IPotionEffect_ExtraPropertiesMixin) {
+            isNeutral = ((IPotionEffect_ExtraPropertiesMixin) potionEffect).lycanitesTweaks$getNeutral();
         }
 
         return isBadEffect || isNeutral;

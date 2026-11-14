@@ -4,6 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
+// Not used, replaced with mixin interface
 public class SpecialPotionEffect extends PotionEffect {
 
     public static final String CLEANSE_NBT = "Cleansable";

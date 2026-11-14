@@ -1,7 +1,7 @@
 package lycanitestweaks.mixin.lycanitestweaksminor.potiontweaks.aurapotionsickness;
 
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import lycanitestweaks.potion.SpecialPotionEffect;
+import lycanitestweaks.util.IPotionEffect_ExtraPropertiesMixin;
 import net.minecraft.potion.PotionEffect;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,6 +15,9 @@ public abstract class RideableCreatureEntity_SicknessMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;addPotionEffect(Lnet/minecraft/potion/PotionEffect;)V")
     )
     private PotionEffect lycanitesTweaks_lycanitesMobsRideableCreatureEntity_onLivingUpdateNoPotionSickness(PotionEffect potioneffectIn){
-        return new SpecialPotionEffect(potioneffectIn).setNeutral(true);
+        if(potioneffectIn instanceof IPotionEffect_ExtraPropertiesMixin) {
+            ((IPotionEffect_ExtraPropertiesMixin) potioneffectIn).lycanitesTweaks$setNeutral(true);
+        }
+        return potioneffectIn;
     }
 }

@@ -3,7 +3,7 @@ package lycanitestweaks.mixin.lycanitestweaksminor.potiontweaks.aurapotionsickne
 import com.lycanitesmobs.core.entity.creature.EntityNymph;
 import com.lycanitesmobs.core.entity.creature.EntityPixen;
 import com.lycanitesmobs.core.entity.creature.EntityStrider;
-import lycanitestweaks.potion.SpecialPotionEffect;
+import lycanitestweaks.util.IPotionEffect_ExtraPropertiesMixin;
 import net.minecraft.potion.PotionEffect;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,6 +21,9 @@ public abstract class TameableEntityAuras_SicknessMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;addPotionEffect(Lnet/minecraft/potion/PotionEffect;)V", ordinal = 0)
     )
     private PotionEffect lycanitesTweaks_lycanitesMobsEntityStrider_onLivingUpdateNoPotionSickness(PotionEffect potioneffectIn){
-        return new SpecialPotionEffect(potioneffectIn).setNeutral(true);
+        if(potioneffectIn instanceof IPotionEffect_ExtraPropertiesMixin) {
+            ((IPotionEffect_ExtraPropertiesMixin) potioneffectIn).lycanitesTweaks$setNeutral(true);
+        }
+        return potioneffectIn;
     }
 }
