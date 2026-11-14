@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "lycanitestweaks.mixin.lycanitestweaksmajor",
+  "refmap": "mixins.lycanitestweaks.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "mixins": [
+    "interacttweaks.advancedarmor.BaseProjectileEntity_ProjectilesMeleeEnchMixin",
+    "interacttweaks.advancedarmor.EntityProjectileLaser_ProjectilesMeleeEnchMixin",
+    "interacttweaks.advancedarmor.ProjectileBehaviourLaser_ProjectilesMeleeEnchMixin"
+  ],
+  "injectors": {
+    "maxShiftBy": 10
+  }
+}

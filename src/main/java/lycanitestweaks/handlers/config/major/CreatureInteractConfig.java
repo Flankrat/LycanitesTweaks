@@ -15,23 +15,53 @@ public class CreatureInteractConfig {
 
     // TODO Migrate to a new name with BetterConfig
     @Config.Comment({
-            "Applies Melee Handling to Charge Projectiles shot by Lycanites entities.",
-            "Despite being conceptually odd, provides better compatibility with mods as ranged handling is less generic",
-            "Primarily intended for use with \"Pets Have Full Set of Equipment\" option."
+            "Applies Melee Enchantment Handling to Charge Projectiles",
+            "The behavior has changed, these are the current behaviors:",
+            "    Affects all Lycanites entities attacking with charges, not just pets",
+            "    Applies Sharpness/Per-Type damage bonus enchantments",
+            "    Applies Knockback enchantments",
+            "    Applies Fire Aspect enchantments",
+            "    Applies after damage enchantments"
     })
     @Config.Name("Apply Melee Handling For Pet Projectiles")
     @Config.RequiresMcRestart
     @MixinConfig.MixinToggle(defaultValue = true, lateMixin = "mixins.lycanitestweaks.feature.projectilestriggermelee.json")
-    public boolean applyMeleeEnchantmentsToCharges = true;
+    public boolean meleeEnchantToChargesMob = true;
 
     @Config.Comment({
+            "Affects all Lycanites entities attacking with charges",
             "Changes the damageType of Lycanites Projectiles from being \"thrown\" to \"mob\".",
-            "Additionally makes Death Messages list the Lycanites projectile involved."
+            "Additionally makes Death Messages list the Lycanites projectile involved.",
+            "Primarily intended to interact with mods that require a different damageType for bonuses, such as So Many Enchantments"
     })
-    @Config.Name("Lycanites Projectiles Damage Source Mob")
+    @Config.Name("Lycanites Shot Projectiles Damage Source Mob")
     @Config.RequiresMcRestart
-    @MixinConfig.MixinToggle(defaultValue = true, lateMixin = "mixins.lycanitestweaks.feature.projectilemobsource.json")
-    public boolean projectileDamageSourceMob = true;
+    @MixinConfig.MixinToggle(defaultValue = true, lateMixin = "mixins.lycanitestweaks.feature.projectiledmgsrclyca.json")
+    public boolean lycaChargeShotDamageSourceMob = true;
+
+    @Config.Comment({
+            "Affects all Non-Lycanites entities attacking with charges",
+            "Applies Melee Enchantment Handling to Charge Projectiles",
+            "    Applies Sharpness/Per-Type damage bonus enchantments",
+            "    Applies Knockback enchantments",
+            "    Applies Fire Aspect enchantments",
+            "    Applies after damage enchantments"
+    })
+    @Config.Name("Non-Lycanites Shot Projectiles Melee Enchantments")
+    @Config.RequiresMcRestart
+    @MixinConfig.MixinToggle(defaultValue = true, lateMixin = "mixins.lycanitestweaks.feature.projectiledmgsrcothers.json")
+    public boolean nlycaChargeShotEnchantments = true;
+
+    @Config.Comment({
+            "Affects all Non-Lycanites entities attacking with charges",
+            "Changes the damageType of Lycanites Projectiles from being \"thrown\" to \"mob\".",
+            "Additionally makes Death Messages list the Lycanites projectile involved.",
+            "Primarily intended to interact with mods that require a different damageType for bonuses, such as So Many Enchantments"
+    })
+    @Config.Name("Non-Lycanites Shot Projectiles Damage Source Mob")
+    @Config.RequiresMcRestart
+    @MixinConfig.MixinToggle(defaultValue = true, lateMixin = "mixins.lycanitestweaks.feature.projectileenchantothers.json")
+    public boolean nlycaChargeShotDamageSourceMob = true;
 
     @Config.Comment({
             "Applies Bow Enchantments to Charge Projectiles shot by Lycanites entities.",

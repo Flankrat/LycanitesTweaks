@@ -41,7 +41,10 @@ public abstract class BaseCreatureEntity_ProjectilesMeleeMixin extends EntityLiv
             remap = false
     )
     private void lycanitesTweaks_lycanitesMobsBaseCreatureEntity_doRangedDamageKnockbackEnchantment(Entity target, EntityThrowable projectile, float damage, boolean noPierce, CallbackInfoReturnable<Boolean> cir, @Local(name = "success") boolean success){
+        if(!success) return;
+
         if(target instanceof EntityLivingBase) {
+            // TODO Charge Projectile doesn't rotate/face in travel direction
             int enchantmentKnockback = EnchantmentHelper.getKnockbackModifier(this);
             if(enchantmentKnockback > 0) {
                 ((EntityLivingBase) target).knockBack(
@@ -56,6 +59,6 @@ public abstract class BaseCreatureEntity_ProjectilesMeleeMixin extends EntityLiv
         int fireEnchantDuration = EnchantmentHelper.getFireAspectModifier(this);
         if(fireEnchantDuration > 0)
             target.setFire(fireEnchantDuration * 4);
-        EnchantmentHelper.applyArthropodEnchantments(this, target);
+        this.applyEnchantments(this, target);
     }
 }
