@@ -2,7 +2,16 @@
 
 # Lycanites Tweaks Added
 subtitles.mobevent.lycanitestweaks_witheringheights=Withering Heights
+# Shared CustomProjectileEntity class
+entity.demonicchaosorb.name=Chaos Orb
+entity.demonicchaosorb.impact=Chaos Orb hits
+entity.demonicchaoslaser.name=Chaos Laser
+entity.lichshadowfire.name=Shadowfire
+entity.lichshadowfire.impact=Shadowfire hits
+entity.sigilwraithskull.name=Wraith Skull
+entity.sigilwraithskull.impact=Wraith Skull hits
 
+# Missing Base
 subtitles.block.rabbitooze.ambient=Rabbit Ooze pops
 
 subtitles.entity.balayang.eat=Balayang eats
@@ -26,26 +35,20 @@ subtitles.entity.thresher.jump=Thresher jumps
 
 subtitles.entity.zoataur.jump=Zoataur jumps
 subtitles.entity.zoataur.mount=Zoataur mounted
-
-subtitles.projectile.hellfirewave=Hellfire Wave
-subtitles.projectile.hellfirebarrier=Hellfire Barrier
-
-subtitles.projectile.demonicchaosorb=Chaos Orb
-subtitles.projectile.demonicchaosorb.impact=Chaos Orb hits
-
-subtitles.projectile.demonicchaoslaser=Chaos Laser
-
-subtitles.projectile.lichshadowfire=Shadowfire
-subtitles.projectile.lichshadowfire.impact=Shadowfire hits
-
-subtitles.projectile.lichspectralbolt=Spectral Bolt
-
-subtitles.projectile.sigilhellfireball=Hellfireball
-
-subtitles.projectile.sigilwraithskull=Wraith Skull
-subtitles.projectile.sigilwraithskull.impact=Wraith Skull hits
-
-subtitles.projectile.devilgatling=Devil Gatling
+# Extends BaseProjectileEntity
+entity.lycanitesmobs:summoningportal.name=Summoning Portal
+entity.lycanitesmobs:laserend.name=Laser
+entity.lycanitesmobs:shadowfirebarrier.name=Shadowfire Barrier
+entity.lycanitesmobs:hellfirewall.name=Hellfire Wall
+entity.lycanitesmobs:hellfireorb.name=Hellfire Orb
+entity.lycanitesmobs:hellfirewave.name=Hellfire Waves
+entity.lycanitesmobs:hellfirewavepart.name=Hellfire Wave
+entity.lycanitesmobs:hellfirebarrier.name=Hellfire Barrier
+entity.lycanitesmobs:hellfirebarrierpart.name=Hellfire Barrier
+entity.lycanitesmobs:devilgatling.name=Devil Gatling
+entity.lycanitesmobs:hellshield.name=Hellshield
+entity.lycanitesmobs:helllaser.name=Hell Lasers
+entity.lycanitesmobs:helllaserend.name=Hell Laser
 
 subtitles.entity.frostweaver.say=Frostweaver Say
 subtitles.entity.frostweaver.hurt=Frostweaver Hurt

@@ -92,12 +92,12 @@
   "projectile.hellfirewave": {
     "category": "ambient",
     "sounds": [{"name": "lycanitesmobs:projectile/hellfirewave", "stream": false}],
-    "subtitle": "subtitles.projectile.hellfirewave"
+    "subtitle": "entity.lycanitesmobs:hellfirewave.name"
   },
   "projectile.hellfirebarrier": {
     "category": "ambient",
     "sounds": [{"name": "lycanitesmobs:projectile/hellfirewave", "stream": false}],
-    "subtitle": "subtitles.projectile.hellfirebarrier"
+    "subtitle": "entity.lycanitesmobs:hellfirebarrier.name"
   },
   "mobevent.witheringheights": {
     "category": "record",
@@ -107,17 +107,17 @@
   "projectile.demonicchaosorb": {
     "category": "ambient",
     "sounds": [{"name": "lycanitesmobs:entity/argus/attack", "stream": false}],
-    "subtitle": "subtitles.projectile.demonicchaosorb"
+    "subtitle": "entity.demonicchaosorb.name"
   },
   "projectile.demonicchaosorb.impact": {
     "category": "ambient",
     "sounds": [{"name": "lycanitesmobs:projectile/chaosorb_impact", "stream": false}],
-    "subtitle": "subtitles.projectile.demonicchaosorb.impact"
+    "subtitle": "entity.demonicchaosorb.impact"
   },
   "projectile.demonicchaoslaser": {
     "category": "ambient",
     "sounds": [{"name": "lycanitesmobs:projectile/arcanelaser", "stream": false, "volume": 0.25}],
-    "subtitle": "subtitles.projectile.demonicchaoslaser"
+    "subtitle": "entity.demonicchaoslaser.name"
   },
   "projectile.demonicshockspark": {
     "category": "ambient",
@@ -132,32 +132,32 @@
   "projectile.lichshadowfire": {
     "category": "ambient",
     "sounds": [{"name": "lycanitesmobs:entity/amalgalich/death", "volume": 0.75, "stream": false}],
-    "subtitle": "subtitles.projectile.lichshadowfire"
+    "subtitle": "entity.lichshadowfire.name"
   },
   "projectile.lichshadowfire.impact": {
     "category": "ambient",
     "sounds": [{"name": "lycanitesmobs:entity/amalgalich/death", "volume": 0.75, "stream": false}],
-    "subtitle": "subtitles.projectile.lichshadowfire.impact"
+    "subtitle": "entity.lichshadowfire.impact"
   },
   "projectile.lichspectralbolt": {
     "category": "ambient",
     "sounds": [{"name": "lycanitesmobs:projectile/spectralbolt", "stream": false}],
-    "subtitle": "subtitles.projectile.lichspectralbolt"
+    "subtitle": "entity.spectralbolt"
   },
   "projectile.sigilhellfireball": {
     "category": "ambient",
     "sounds": [{"name": "lycanitesmobs:projectile/hellfireball", "stream": false}],
-    "subtitle": "subtitles.projectile.sigilhellfireball"
+    "subtitle": "entity.hellfireball"
   },
   "projectile.sigilwraithskull": {
     "category": "ambient",
     "sounds": [{"name": "lycanitesmobs:entity/wraith/attack", "stream": false}],
-    "subtitle": "subtitles.projectile.sigilwraithskull"
+    "subtitle": "entity.sigilwraithskull.name"
   },
   "projectile.sigilwraithskull.impact": {
     "category": "ambient",
     "sounds": [{"name": "lycanitesmobs:entity/wraith/death", "stream": false}],
-    "subtitle": "subtitles.projectile.sigilwraithskull.impact"
+    "subtitle": "entity.sigilwraithskull.impact"
   },
   "entity.darkling.assimilated.say": {
     "category": "hostile",
@@ -228,7 +228,7 @@
     "replace": true,
     "category": "ambient",
     "sounds": [{"name": "lycanitesmobs:projectile/devilgatling", "stream": false}],
-    "subtitle": "subtitles.projectile.devilgatling"
+    "subtitle": "entity.lycanitesmobs:devilgatling.name"
   },
   "entity.malayang.say": {"sounds": [],"replace": true},
   "entity.malayang.hurt": {"sounds": [],"replace": true},

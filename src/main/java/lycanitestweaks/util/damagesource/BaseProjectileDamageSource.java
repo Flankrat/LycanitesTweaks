@@ -2,11 +2,10 @@ package lycanitestweaks.util.damagesource;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.translation.I18n;
 
 import javax.annotation.Nullable;
 
@@ -18,48 +17,38 @@ public class BaseProjectileDamageSource extends EntityDamageSourceIndirect {
 
     @Override
     public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
-        Entity killer = this.getTrueSource();
+        // Modify super for compat with Scaling Health Issues
         Entity indirectKiller = this.getImmediateSource();
+        String originalDamageType = this.damageType;
+        if(indirectKiller instanceof EntityThrowable) {
+            this.damageType = "thrown";
+        }
+        ITextComponent baseMessage = super.getDeathMessage(entityLivingBaseIn);
+        this.damageType = originalDamageType;
 
-        ITextComponent killerDisplayName;
-        ItemStack itemstack;
-
-        if(indirectKiller != null && killer == null) {
-            killerDisplayName = indirectKiller.getDisplayName();
-            itemstack = indirectKiller instanceof EntityLivingBase
-                    ? ((EntityLivingBase)indirectKiller).getHeldItemMainhand()
-                    : ItemStack.EMPTY;
+        if(this.getTrueSource() != null) {
+            TextComponentTranslation translatedMessage = null;
+            if(baseMessage instanceof TextComponentTranslation) {
+                translatedMessage = (TextComponentTranslation) baseMessage;
+            }
+            else {
+                // Mistake in SHI, accidental wrapping
+                for(ITextComponent component : baseMessage.getSiblings()) {
+                    if(component instanceof TextComponentTranslation) {
+                        translatedMessage = (TextComponentTranslation) component;
+                        break;
+                    }
+                }
+            }
+            if(translatedMessage != null) {
+                if(translatedMessage.getFormatArgs().length > 1) {
+                    if(indirectKiller != null && translatedMessage.getFormatArgs()[1] instanceof ITextComponent) {
+                        ITextComponent killerDisplayName = (ITextComponent) translatedMessage.getFormatArgs()[1];
+                        killerDisplayName.appendText(" [").appendSibling(indirectKiller.getDisplayName()).appendText("]");
+                    }
+                }
+            }
         }
-        else if(killer != null) {
-            killerDisplayName = killer.getDisplayName();
-            itemstack = killer instanceof EntityLivingBase
-                    ? ((EntityLivingBase)killer).getHeldItemMainhand()
-                    : ItemStack.EMPTY;
-        }
-        else {
-            killerDisplayName = new TextComponentTranslation("entity.generic.name");
-            itemstack = ItemStack.EMPTY;
-        }
-
-        // Append item to entity display name
-        if(!itemstack.isEmpty() && itemstack.hasDisplayName()) {
-            killerDisplayName.appendText(" [").appendSibling(itemstack.getTextComponent()).appendText("]");
-        }
-
-        String langKey = "death.attack.";
-        if(indirectKiller instanceof EntityLivingBase) {
-            langKey += this.damageType;
-        }
-        else {
-            langKey += "thrown";
-        }
-        String withItemLangKey = langKey + ".item"; // Reused to show indirect entity
-
-        if(I18n.canTranslate(withItemLangKey) && indirectKiller != null) {
-            return new TextComponentTranslation(withItemLangKey, entityLivingBaseIn.getDisplayName(), killerDisplayName, indirectKiller.getDisplayName());
-        }
-        else {
-            return new TextComponentTranslation(langKey, entityLivingBaseIn.getDisplayName(), killerDisplayName);
-        }
+        return baseMessage;
     }
 }
