@@ -484,9 +484,10 @@ public class PatchConfig {
     public boolean fixClientPetEntryVisual = true;
 
     @Config.Comment({
-            "Fix pets/mounts/familiars vanishing from the beastiary when the player is saved before their pets are loaded",
-            "(death/respawn, leaving the End, logging out or an autosave right after joining)",
-            "Saved pets are only loaded on the player's next tick, and a save before that wrote an empty pet list"
+            "Fix pets and mounts vanishing from the beastiary when the player is saved before their pets are loaded",
+            "    (death/respawn, leaving the End, logging out or an autosave right after joining)",
+            "Lycanites required a tick to initialize pet nbt into a savable state",
+            "This will save any pre-initialized nbt instead of discarding them"
     })
     @Config.Name("Fix Pets Lost When Saved Before Loading")
     @Config.RequiresMcRestart

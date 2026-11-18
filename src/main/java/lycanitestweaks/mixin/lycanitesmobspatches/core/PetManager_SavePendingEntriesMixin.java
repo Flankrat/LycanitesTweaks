@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Map;
 import java.util.UUID;
 
+// Fix by Flankrat/Maximus
 @Mixin(PetManager.class)
 public abstract class PetManager_SavePendingEntriesMixin {
 
